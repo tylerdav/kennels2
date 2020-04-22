@@ -30,7 +30,9 @@ export default () => (
 
         <h2>Employees</h2>
         <EmployeeProvider>
-            <EmployeeList />
+            <LocationProvider>
+                <EmployeeList />
+            </LocationProvider>
         </EmployeeProvider>
 
         <h2>Locations</h2>
