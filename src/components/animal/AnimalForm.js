@@ -1,58 +1,58 @@
 import React, { useContext, useRef } from "react"
-import { EmployeeContext } from "./EmployeeProvider"
 import { LocationContext } from "../location/LocationProvider"
-import "./Employee.css"
+import { AnimalContext } from "./AnimalProvider"
 
 export default props => {
-    const { addEmployee } = useContext(EmployeeContext)
     const { locations } = useContext(LocationContext)
+    const { addAnimal } = useContext(AnimalContext)
+
     const name = useRef()
     const location = useRef()
-    const address = useRef()
+    const breed = useRef()
 
-    const constructNewEmployee = () => {
+    const constructNewAnimal = () => {
         const locationId = parseInt(location.current.value)
-
-        if (locationId === 0) {
-            window.alert("Please select a location")
-        } else {
-            addEmployee({
-                name: name.current.value,
-                locationId: locationId,
-                address: address.current.value
-            })
-                .then(props.toggler)
+        const userId = parseInt(localStorage.getItem("kennel_customer"))
+        // create a new animal object  
+        // Make sure that the animal object has the customerId and locationId foreign keys on it.
+        const newAnimalObj = {
+            name: name.current.value,
+            breed: breed.current.value,
+            locationId: locationId,
+            customerId: userId
         }
+        console.log(newAnimalObj)
+        // and save it to the API.
+        addAnimal(newAnimalObj).then(props.toggler)
     }
 
     return (
-        <form className="employeeForm">
-            <h2 className="employeeForm__title">New Employee</h2>
+        <form className="animalForm">
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="employeeName">Employee name: </label>
+                    <label htmlFor="animalName">Name of Animal: </label>
                     <input
                         type="text"
-                        id="employeeName"
+                        id="animalName"
                         ref={name}
                         required
                         autoFocus
                         className="form-control"
-                        placeholder="Employee name"
+                        placeholder="animal name"
                     />
                 </div>
             </fieldset>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="employeeAddress">Address: </label>
+                    <label htmlFor="animalBreed">Breed of Animal: </label>
                     <input
                         type="text"
-                        id="employeeAddress"
-                        ref={address}
+                        id="animalBreed"
+                        ref={breed}
                         required
                         autoFocus
                         className="form-control"
-                        placeholder="Street address"
+                        placeholder="animal breed"
                     />
                 </div>
             </fieldset>
@@ -63,7 +63,7 @@ export default props => {
                         defaultValue=""
                         name="location"
                         ref={location}
-                        id="employeeLocation"
+                        id="animalLocation"
                         className="form-control"
                     >
                         <option value="0">Select a location</option>
@@ -79,11 +79,12 @@ export default props => {
                 onClick={
                     evt => {
                         evt.preventDefault() // Prevent browser from submitting the form
-                        constructNewEmployee()
+                        // create the animal function goes here
+                        constructNewAnimal()
                     }
                 }
                 className="btn btn-primary">
-                Save Employee
+                Admit Animal
             </button>
         </form>
     )
